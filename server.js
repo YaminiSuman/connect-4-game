@@ -21,15 +21,27 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-const user = new User({ username: 'Yamini', password: '12345' });
+const user = new User({ username: "Yamini", password: "12345" });
 
 user.save((err) => {
   if (err) throw err;
-  console.log("New user has been saved to db")
-})
+  console.log("New user has been saved to db");
+});
 
 app.get("/", (req, res) => {
   res.send("Welcome to the game server!");
+});
+
+app.post("/", (req, res) => {
+  const { username, password } = req.body;
+  const user = new User({ username, password });
+  user.save((error) => {
+    if (error) {
+      res.status(500).send(error);
+    } else {
+      res.send("User saved to the database");
+    }
+  });
 });
 
 app.listen(3000, () => {
